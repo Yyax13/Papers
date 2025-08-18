@@ -150,7 +150,7 @@ O `sudoedit` é uma ferramenta do `sudo` que serve para modificar arquivos mesmo
 O processo é assim:
 
 ```mermaid
-graph TD
+graph LR
     A[Usuário inicia sudoedit filename] --> B{sudoedit é invocado}
     B --> C[sudoedit: Cria cópia temporária do arquivo original]
     C --> D[Cópia temporária e diretório possuem permissões do Usuário]
@@ -173,7 +173,7 @@ A flag `-R` (ou `--chroot`) é uma opção que roda seu comando/binário dentro 
 Ele funciona desse jeito:
 
 ```mermaid
-graph TD
+graph LR
     A[Usuário executa: sudo -R /caminho/chroot comando] --> B{Sudo é invocado com privilégios de root}
     B --> C[Sudo processa argumentos e detecta a opção -R ou --chroot]
     C --> D["Sudo realiza a chamada de sistema chroot('/caminho/chroot')"]
