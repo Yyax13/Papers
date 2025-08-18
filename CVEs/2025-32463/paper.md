@@ -142,7 +142,7 @@ Quando rodamos o comando, o sudo tenta resolver info do user atual (`passwd`) e 
 
 ### Entenda o `sudoedit` e `-R`
 
-Para entender a vulnerailidade em si, primeiro vamos entender como o `sudo` deveria ser utilizado normalmente, como o escopo vulnerável funciona em casos normais.
+Para entender a vulnerabilidade em si, primeiro vamos entender como o `sudo` deveria ser utilizado normalmente, como o escopo vulnerável funciona em casos normais.
 
 ***sudoedit*:**
 
