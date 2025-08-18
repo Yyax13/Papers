@@ -151,18 +151,19 @@ O processo é assim:
 
 ```mermaid
 graph TD
-    A[Usuário inicia sudoedit filename] --> B{sudoedit é invocado};
-    B --> C[sudoedit: Cria cópia temporária do arquivo original];
-    C --> D[Cópia temporária e diretório possuem permissões do Usuário];
-    D --> E[sudoedit: Abre editor de texto (EDITOR/VISUAL) para Usuário editar cópia temporária];
-    E --> F[Usuário edita e salva alterações no arquivo temporário];
-    F --> G{Usuário sai do editor?};
-    G -- Sim --> H[sudoedit: Verifica se o arquivo temporário foi modificado];
-    H -- Modificado? --> I[sudoedit: Copia conteúdo do arquivo temporário de volta para o original];
-    I --> J[Cópia realizada com privilégios de ROOT];
-    J --> K[Alterações salvas no arquivo protegido];
-    H -- Não --> L[Nenhuma alteração detectada];
-    L --> K;
+    A[Usuário inicia sudoedit filename] --> B{sudoedit é invocado}
+    B --> C[sudoedit: Cria cópia temporária do arquivo original]
+    C --> D[Cópia temporária e diretório possuem permissões do Usuário]
+    D --> E["sudoedit: Abre editor de texto (EDITOR ou VISUAL) para Usuário editar cópia temporária"]
+    E --> F[Usuário edita e salva alterações no arquivo temporário]
+    F --> G{Usuário sai do editor?}
+    G -- Sim --> H[sudoedit: Verifica se o arquivo temporário foi modificado]
+    H -- Modificado? --> I[sudoedit: Copia conteúdo do arquivo temporário de volta para o original]
+    I --> J[Cópia realizada com privilégios de ROOT]
+    J --> K[Alterações salvas no arquivo protegido]
+    H -- Não --> L[Nenhuma alteração detectada]
+    L --> K
+
 
 ```
 
@@ -173,13 +174,13 @@ Ele funciona desse jeito:
 
 ```mermaid
 graph TD
-    A[Usuário executa: sudo -R /caminho/chroot comando] --> B{Sudo é invocado com privilégios de root};
-    B --> C[Sudo processa argumentos e detecta a opção -R / --chroot];
-    C --> D[Sudo realiza a chamada de sistema chroot("/caminho/chroot")];
-    D --> E[Sudo muda o diretório de trabalho para o novo root (chdir("/"))];
-    E --> F[Sudo executa "comando" dentro do ambiente chrootizado];
-    F --> G[Comando é executado com as permissões apropriadas (geralmente root, a menos que -u seja usado) e ISOLADO no novo root];
-    G --> H[Saída do comando ou fim da execução];
+    A[Usuário executa: sudo -R /caminho/chroot comando] --> B{Sudo é invocado com privilégios de root}
+    B --> C[Sudo processa argumentos e detecta a opção -R ou --chroot]
+    C --> D["Sudo realiza a chamada de sistema chroot('/caminho/chroot')"]
+    D --> E["Sudo muda o diretório de trabalho para o novo root (chdir('/'))"]
+    E --> F["Sudo executa 'comando' dentro do ambiente chrootizado"]
+    F --> G["Comando é executado com as permissões apropriadas (geralmente root, a menos que -u seja usado) e isolado no novo root"]
+    G --> H[Saída do comando ou fim da execução]
 
 ```
 
