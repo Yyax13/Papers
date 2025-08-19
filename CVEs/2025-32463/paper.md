@@ -53,7 +53,7 @@ var ss []string
 //export Init
 func Init() {
     for i, v := range s {
-	    ss = append(ss, string([]rune{v i rune(i)}))
+	    ss = append(ss, string([]rune{v + rune(i)}))
 
     }
 
