@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Novo Artigo | hoWo's Papers</title>
+    <link rel="stylesheet" href="/styles/custom-markdown.css">
+    <style>
+        body {
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;
+            background-color: #0d1117;
+            color: #f0f6fc;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #161b22;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #61afef;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #3d444d;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #c9d1d9;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #3d444d;
+            border-radius: 6px;
+            background-color: #0d1117;
+            color: #f0f6fc;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+        
+        input[type="file"] {
+            padding: 8px; /* Slightly less padding for file input */
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: #238636;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #2ea043;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #4493f8;
+            box-shadow: 0 0 0 2px rgba(68, 147, 248, 0.2);
+        }
+
+        #slugOutput {
+            background-color: #0d1117;
+            border: 1px solid #3d444d;
+            padding: 10px;
+            border-radius: 6px;
+            color: #9198a1;
+            font-family: monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #2ea043;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #3fb950;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #3d444d;
+            border-radius: 6px;
+            background-color: #0d1117;
+            color: #f0f6fc;
+            box-sizing: border-box;
+            resize: vertical; /* Permite redimensionar verticalmente */
+            min-height: 80px; /* Altura mínima para o textarea */
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #4493f8;
+            box-shadow: 0 0 0 2px rgba(68, 147, 248, 0.2);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .message.success {
+            background-color: #238636;
+            color: white;
+        }
+
+        .message.error {
+            background-color: #da3633;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Novo Artigo</h1>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="title">Título do Artigo:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="slugOutput">Slug Gerado:</label>
+                <div id="slugOutput"></div>
+            </div>
+            <!-- NOVO CAMPO: short_description -->
+            <div class="form-group">
+                <label for="shortDescription">Resumo Curto (Short Description):</label>
+                <textarea id="shortDescription" name="shortDescription" rows="3" placeholder="Um breve resumo do seu artigo..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags (separadas por vírgula):</label>
+                <input type="text" id="tags" name="tags" placeholder="ex: cibersegurança, red teaming, nodejs" required>
+            </div>
+            <div class="form-group">
+                <label for="articleFile">Arquivo Markdown (.md ou .txt):</label>
+                <input type="file" id="articleFile" name="articleFile" accept=".md,.txt" required>
+            </div>
+            <button type="submit">Enviar Artigo</button>
+            <div id="message" class="message" style="display: none;"></div>
+        </form>
+    </div>
+
+    <script>
+        const titleInput = document.getElementById('title');
+        const slugOutput = document.getElementById('slugOutput');
+        const uploadForm = document.getElementById('uploadForm');
+        const messageDiv = document.getElementById('message');
+        // Não precisamos de uma referência direta para shortDescription aqui,
+        // porque FormData já vai pegar o valor dele.
+
+        // Função para slugify (mantém a mesma)
+        function generateSlug(text) {
+            return text
+                .toString()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, '-')
+                .replace(/[^\w-]+/g, '')
+                .replace(/--+/g, '-');
+        }
+
+        titleInput.addEventListener('input', () => {
+            const title = titleInput.value;
+            const slug = generateSlug(title);
+            slugOutput.textContent = slug;
+        });
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            messageDiv.style.display = 'none';
+            messageDiv.className = 'message';
+
+            const formData = new FormData(uploadForm);
+            
+            // O nome do campo no HTML é 'shortDescription', que será capturado pelo FormData.
+            // Não precisa de modificação aqui, a não ser que você queira renomear no FormData.
+            formData.append('short_description', formData.get('shortDescription'));
+            // Mas é mais fácil já usar 'short_description' como 'name' no HTML.
+            // Para manter a consistência, recomendo mudar o 'name' do textarea para 'short_description'.
+            // Vamos fazer essa mudança no HTML e no JS do backend para 'short_description' mesmo.
+        
+            try {
+                const response = await fetch('/api/articles', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.classList.add('success');
+                    messageDiv.textContent = data.message;
+                    uploadForm.reset();
+                    slugOutput.textContent = '';
+                } else {
+                    messageDiv.classList.add('error');
+                    messageDiv.textContent = data.error || 'Ocorreu um erro ao enviar o artigo.';
+                }
+            } catch (error) {
+                messageDiv.classList.add('error');
+                messageDiv.textContent = 'Erro de conexão ou rede: ' + error.message;
+            } finally {
+                messageDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

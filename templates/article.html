@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>__insert_the_title_here | hoWo's Papers</title>
+
+    <link rel="stylesheet" href="/styles/github-markdown-dark.css">
+    <link rel="stylesheet" href="/styles/github-dark.min.css">
+    <link rel="stylesheet" href="/styles/custom-markdown.css">
+    <style>
+    body {
+        background-color: #0d1117;
+        margin: 0;
+        min-height: 100vh;
+        display: flex; /* Habilita flexbox para o body */
+        flex-direction: column; /* Coloca os elementos (header, main-content-wrapper) em coluna */
+        padding: 0; /* Remove padding do body para o header encostar nas bordas */
+        box-sizing: border-box;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif; /* Consistência com o index */
+        color: #f0f6fc; /* Consistência com o index */
+        line-height: 1.6; /* Consistência com o index */
+    }
+
+    /* Estilos do Container - Copiado do index.html */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        width: 100%;
+    }
+
+    /* Estilos do Header - Copiado e adaptado do index.html */
+    header {
+        background-color: #161b22; /* Cor de fundo (var(--card-bg)) */
+        padding: 20px 0;
+        border-bottom: 1px solid #3d444d; /* Borda inferior (var(--border-color)) */
+        text-align: center;
+    }
+
+    header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: #61afef; /* Cor do texto (var(--primary-color)) */
+        text-decoration: none;
+    }
+
+    nav a {
+        color: #f0f6fc; /* Cor do texto (var(--text-color)) */
+        text-decoration: none;
+        margin-left: 25px;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+    nav a:hover {
+        color: #61afef; /* Cor do texto (var(--primary-color)) */
+    }
+
+    .main-content-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 1400px;
+        gap: 40px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin: 0 auto; /* Centraliza o conteúdo principal horizontalmente */
+        padding: 20px; /* Adiciona o padding que o body tinha */
+    }
+
+    .articles_suggestions {
+        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+        flex: 0 0 280px;
+        padding: 20px;
+        background-color: #161b22;
+        border-radius: 8px;
+        color: #c9d1d9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        max-height: calc(100vh - 40px); /* Ajustado para considerar o padding do main-content-wrapper */
+        overflow-y: auto;
+    }
+
+    .articles_suggestions h2 {
+        color: #61afef;
+        margin-top: 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #3d444d;
+        padding-bottom: 10px;
+    }
+
+    .articles_suggestions ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .articles_suggestions li {
+        margin-bottom: 10px;
+    }
+
+    .articles_suggestions a {
+        color: #c678dd;
+        text-decoration: none;
+    }
+
+    .articles_suggestions a:hover {
+        text-decoration: underline;
+    }
+
+    .markdown-body {
+        flex: 1;
+        min-width: 600px;
+        padding: 30px;
+        background-color: #161b22;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 0 !important;
+        padding: 30px !important;
+        border: none !important;
+        box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+        /* Responsividade do Header - Copiado do index.html */
+        header .container {
+            flex-direction: column;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            margin: 0 10px;
+        }
+        
+        /* Responsividade do Conteúdo Principal - já existia */
+        .main-content-wrapper {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px; /* Mantém padding para o conteúdo principal */
+        }
+
+        .articles_suggestions, .markdown-body {
+            flex: 1 1 100%;
+            min-width: unset;
+            max-width: unset;
+        }
+
+        .articles_suggestions {
+            order: 2;
+        }
+        .markdown-body {
+            order: 1;
+        }
+    }
+
+    /* Novos estilos para os containers de diagrama e controles individuais */
+    .diagram-container {
+        position: relative; /* Essencial para posicionar os controles de forma absoluta */
+        display: block; /* Para que cada diagrama ocupe sua própria linha */
+        margin: 20px 0; /* Espaçamento entre diagramas */
+        border: 1px solid #30363d; /* Uma borda sutil para cada diagrama */
+        border-radius: 8px;
+        overflow: hidden; /* Garante que nada saia do container */
+        background-color: #0d1117; /* Fundo do container para contrastar com o SVG se ele tiver fundo transparente */
+    }
+
+    .custom-controls {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px; /* Espaçamento entre os botões */
+        z-index: 10; /* Garante que os controles fiquem acima do SVG */
+    }
+
+    .custom-controls button {
+        background-color: #21262d; /* Cor de fundo escura, ligeiramente mais clara que o body */
+        color: #c9d1d9; /* Cor do texto/ícone, igual à cor do texto geral */
+        border: 1px solid #30363d; /* Borda sutil */
+        padding: 5px; /* Preenchimento interno */
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.2s, border-color 0.2s, color 0.2s; /* Transição suave */
+        font-size: 1em; /* Tamanho da fonte para os ícones */
+        width: 30px; /* Largura fixa */
+        height: 30px; /* Altura fixa */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custom-controls button:hover {
+        background-color: #30363d; /* Cor de fundo no hover */
+        border-color: #444c56; /* Cor da borda no hover */
+        color: #ffffff; /* Cor do texto/ícone no hover */
+    }
+
+    .custom-controls button:active {
+        background-color: #161b22; /* Cor de fundo ao clicar */
+        border-color: #21262d; /* Cor da borda ao clicar */
+    }
+
+    /* Garante que o SVG ocupe todo o espaço disponível dentro do container */
+    .diagram-container svg {
+        display: block; /* Remove espaços extras */
+        width: 100%;
+        height: auto; /* Mantém a proporção */
+    }
+    </style>
+</head>
+<body>
+    <!-- HEADER COPIADO DIRETAMENTE DO index.html -->
+    <header>
+        <div class="container">
+            <a href="/" class="logo">hoWo's Papers</a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/articles">Artigos</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-content-wrapper">
+        <div class="articles_suggestions">
+            <h2>Artigos Sugeridos</h2>
+            <ul>
+                __insert_suggestions_here
+            </ul>
+        </div>
+        <div class="markdown-body">
+            __insert_content_here
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script>
+
+    <script type="module">
+        console.log(">>> Script module iniciado!");
+
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        console.log(">>> Import mermaid funcionou!");
+
+        mermaid.initialize({
+            theme: 'dark', // Ou 'default', 'forest', 'neutral', 'base'
+        });
+        console.log(">>> mermaid.initialize (configuração inicial) efetuado!");
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log(">>> DOMContentLoaded disparado - Preparando para renderizar e aplicar zoom aos diagramas.");
+
+            const mermaidBlocks = document.querySelectorAll('pre.mermaid');
+
+            if (mermaidBlocks.length === 0) {
+                console.warn(">>> Nenhuma tag <pre class='mermaid'> encontrada. Nenhum diagrama será processado.");
+                return;
+            }
+
+            // Loop para processar CADA bloco Mermaid encontrado
+            for (const [index, block] of mermaidBlocks.entries()) {
+                const diagramText = block.textContent.trim();
+                if (!diagramText) {
+                    console.warn(`>>> Bloco <pre class='mermaid'> vazio no índice ${index}. Pulando.`);
+                    continue;
+                }
+
+                // Cria um contêiner para cada diagrama e seus controles
+                const diagramContainer = document.createElement('div');
+                diagramContainer.classList.add('diagram-container');
+
+                // Cria o div para os controles personalizados
+                const customControlsDiv = document.createElement('div');
+                customControlsDiv.classList.add('custom-controls');
+                customControlsDiv.innerHTML = `
+                    <button class="zoom-in">+</button>
+                    <button class="zoom-out">−</button>
+                    <button class="reset">⟲</button>
+                `;
+
+                // Adiciona os controles ao contêiner do diagrama
+                diagramContainer.appendChild(customControlsDiv);
+
+                // Substitui o bloco <pre> original pelo novo contêiner
+                block.parentNode.replaceChild(diagramContainer, block);
+
+                // Renderiza o diagrama Mermaid
+                // O ID precisa ser único para cada renderização do Mermaid
+                const svgRenderId = `mermaid-svg-${Date.now()}-${index}`;
+                console.log(`>>> Tentando renderizar diagrama ${index} para o ID: ${svgRenderId}`);
+
+                try {
+                    const { svg } = await mermaid.render(svgRenderId, diagramText);
+
+                    // Cria um wrapper temporário para converter a string SVG em um elemento DOM
+                    const svgWrapper = document.createElement('div');
+                    svgWrapper.innerHTML = svg;
+                    const renderedSvgElement = svgWrapper.querySelector('svg');
+
+                    if (renderedSvgElement) {
+                        // Adiciona o SVG renderizado ao contêiner do diagrama
+                        diagramContainer.appendChild(renderedSvgElement);
+
+                        // Inicializa svgPanZoom para este SVG específico
+                        const panZoomInstance = svgPanZoom(renderedSvgElement, {
+                            zoomEnabled: true,
+                            controlIconsEnabled: false, // <<<< O ponto chave: DESABILITA OS CONTROLES DEFAULT!
+                            fit: true,
+                            center: true,
+                            minZoom: 0.1,
+                            maxZoom: 10,
+                            zoomScaleSensitivity: 0.2,
+                        });
+                        console.log(`>>> svgPanZoom inicializado com sucesso para o SVG com ID: ${renderedSvgElement.id}`);
+
+                        // Conecta os botões personalizados a esta instância específica do svgPanZoom
+                        customControlsDiv.querySelector('.zoom-in').addEventListener('click', () => {
+                            panZoomInstance.zoomIn();
+                        });
+                        customControlsDiv.querySelector('.zoom-out').addEventListener('click', () => {
+                            panZoomInstance.zoomOut();
+                        });
+                        customControlsDiv.querySelector('.reset').addEventListener('click', () => {
+                            panZoomInstance.reset();
+                        });
+                        console.log(`>>> Controles personalizados configurados para o diagrama ${index}.`);
+
+                    } else {
+                        console.error(`>>> Erro: Elemento SVG não encontrado no container gerado para o diagrama ${index}.`);
+                        // Reinsere o bloco original com mensagem de erro se o SVG não for encontrado
+                        diagramContainer.innerHTML = `<p style="color: red;">Erro ao renderizar o diagrama.</p><pre>${diagramText}</pre>`;
+                    }
+
+                } catch (error) {
+                    console.error(`>>> Erro ao renderizar ou processar diagrama ${index}:`, error);
+                    // Reinsere o bloco original com mensagem de erro em caso de falha na renderização
+                    diagramContainer.innerHTML = `<p style="color: red;">Erro ao renderizar o diagrama.</p><pre>${diagramText}</pre>`;
+                }
+            }
+            console.log(">>> Processamento de todos os diagramas Mermaid concluído.");
+        });
+    </script>
+</body>
+</html>

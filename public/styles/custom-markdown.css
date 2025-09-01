@@ -1,0 +1,28 @@
+/* public/styles/mermaid-custom.css */
+
+/* Força o preenchimento do texto para uma cor clara */
+.node text {
+    fill: #f0f6fc !important; /* Branco acinzentado do GitHub Dark */
+}
+
+.edgeLabel text {
+    fill: #61afef !important; /* Azulzão para labels de arestas */
+}
+
+.cluster text {
+    fill: #e06c75 !important; /* Vermelho/rosa para texto de clusters */
+}
+
+/* Estilos adicionais para os nós, se quiser forçar cores específicas */
+.node rect, .node circle, .node polygon {
+    fill: #2f363d !important; /* Fundo dos nós */
+    stroke: #4493f8 !important; /* Borda dos nós */
+}
+
+.edgePath .path {
+    stroke: #3fb950 !important; /* Linhas das arestas */
+}
+
+.arrowheadPath {
+    fill: #3fb950 !important; /* Pontas das setas */
+}
