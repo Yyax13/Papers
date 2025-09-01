@@ -52,7 +52,7 @@ app.use((req, res) => {
 
 })
 
-app.listen("8080", () => {
-    console.log("LISTENING IN PORT 8080: http://0.0.0.0:8080")
+app.listen("80", () => {
+    console.log("LISTENING IN PORT 8080: http://0.0.0.0:80")
 
 })
